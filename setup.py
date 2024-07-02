@@ -8,7 +8,8 @@ subprocess.run(["sudo", "apt", "install", "-y", "make", "build-essential", "libs
                 "xz-utils", "tk-dev", "libxml2-dev", "libxmlsec1-dev", "libffi-dev", "liblzma-dev", "lzma"])
 
 # Install pyenv
-subprocess.run(["curl", "https://pyenv.run", "|", "bash"])
+subprocess.run(["curl", "-fsSL", "https://pyenv.run", "-o", "pyenv-installer.sh"])
+subprocess.run(["bash", "pyenv-installer.sh"])
 
 # Update ~/.bashrc with pyenv configurations
 os.system('echo \'export PYENV_ROOT="$HOME/.pyenv"\nexport PATH="$PYENV_ROOT/bin:$PATH"\' >> ~/.bashrc')
