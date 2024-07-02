@@ -1,6 +1,17 @@
 import os
 import subprocess
 
+# Update ~/.bashrc with pyenv and poetry configurations
+with open(os.path.expanduser("~/.bashrc"), "a") as bashrc:
+    bashrc.write('export PYENV_ROOT="$HOME/.pyenv"\n')
+    bashrc.write('export PATH="$PYENV_ROOT/bin:$PATH"\n')
+    bashrc.write('eval "$(pyenv init --path)"\n')
+    bashrc.write('eval "$(pyenv init -)"\n')
+    bashrc.write('export PATH="$HOME/.local/bin:$PATH"\n')
+
+# Source the updated ~/.bashrc to make changes effective in the current session
+subprocess.run(["source", os.path.expanduser("~/.bashrc")], shell=True, executable="/bin/bash")
+
 # Update package lists and install required packages
 subprocess.run(["sudo", "apt", "update"])
 subprocess.run(["sudo", "apt", "install", "-y", "make", "build-essential", "libssl-dev", "zlib1g-dev",
@@ -11,21 +22,13 @@ subprocess.run(["sudo", "apt", "install", "-y", "make", "build-essential", "libs
 subprocess.run(["curl", "-fsSL", "https://pyenv.run", "-o", "pyenv-installer.sh"])
 subprocess.run(["bash", "pyenv-installer.sh"])
 
-# Update ~/.bashrc with pyenv configurations
-os.system('echo \'export PYENV_ROOT="$HOME/.pyenv"\nexport PATH="$PYENV_ROOT/bin:$PATH"\' >> ~/.bashrc')
-os.system('echo \'eval "$(pyenv init --path)"\neval "$(pyenv init -)"\' >> ~/.bashrc')
-os.system('exec "$SHELL"')
-
 # Install Python 3.11.9 using pyenv
 subprocess.run(["pyenv", "install", "3.11.9"])
 subprocess.run(["pyenv", "global", "3.11.9"])
 
 # Install poetry
-subprocess.run(["curl", "-sSL", "https://install.python-poetry.org", "|", "python3", "-"])
-
-# Update ~/.bashrc with poetry path
-os.system('echo \'export PATH="$HOME/.local/bin:$PATH"\' >> ~/.bashrc')
-os.system('exec "$SHELL"')
+subprocess.run(["curl", "-sSL", "https://install.python-poetry.org", "-o", "poetry-installer.sh"])
+subprocess.run(["python3", "poetry-installer.sh"])
 
 # Configure poetry
 subprocess.run(["poetry", "config", "virtualenvs.in-project", "true"])
@@ -34,12 +37,14 @@ subprocess.run(["poetry", "config", "virtualenvs.in-project", "true"])
 subprocess.run(["sudo", "apt-get", "-y", "install", "pciutils"])
 
 # Install Ollama
-subprocess.run(["curl", "-fsSL", "https://ollama.com/install.sh", "|", "sh"])
+subprocess.run(["curl", "-fsSL", "https://ollama.com/install.sh", "-o", "ollama-installer.sh"])
+subprocess.run(["sh", "ollama-installer.sh"])
 os.environ['OLLAMA_DEBUG'] = '1'
 subprocess.run(["sudo", "systemctl", "enable", "ollama"])
 
-# Start Ollama service using tmux
-subprocess.run(["tmux", "new-session", "-d", "-s", "ollama_session", "'ollama serve > ollama.log 2>&1'"])
+# Start Ollama service using Popen in a subshell
+ollama_command = "ollama serve > ollama.log 2>&1"
+subprocess.Popen(ollama_command, shell=True, executable="/bin/bash")
 
 # Pull required repositories
 subprocess.run(["ollama", "pull", "mistral"])
