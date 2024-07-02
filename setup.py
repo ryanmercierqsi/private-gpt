@@ -44,14 +44,10 @@ subprocess.run(["tmux", "new-session", "-d", "-s", "ollama_session", "'ollama se
 subprocess.run(["ollama", "pull", "mistral"])
 subprocess.run(["ollama", "pull", "nomic-embed-text"])
 
-# Clone private-gpt repository and set up environment
-subprocess.run(["git", "clone", "https://github.com/zylon-ai/private-gpt"])
-os.chdir("private-gpt")
+# Set up environment
 subprocess.run(["pyenv", "local", "3.11.9"])
 subprocess.run(["poetry", "install", "--extras", "ui llms-ollama embeddings-ollama vector-stores-qdrant"])
-
-# Set environment variable
 os.environ['PGPT_PROFILES'] = 'ollama'
 
-# Run make command
+# Run make command to start
 subprocess.run(["make", "run"])
