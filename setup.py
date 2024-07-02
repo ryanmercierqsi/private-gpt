@@ -1,17 +1,6 @@
 import os
 import subprocess
 
-# Update ~/.bashrc with pyenv and poetry configurations
-with open(os.path.expanduser("~/.bashrc"), "a") as bashrc:
-    bashrc.write('export PYENV_ROOT="$HOME/.pyenv"\n')
-    bashrc.write('export PATH="$PYENV_ROOT/bin:$PATH"\n')
-    bashrc.write('eval "$(pyenv init --path)"\n')
-    bashrc.write('eval "$(pyenv init -)"\n')
-    bashrc.write('export PATH="$HOME/.local/bin:$PATH"\n')
-
-# Source the updated ~/.bashrc to make changes effective in the current session
-subprocess.run(["source", os.path.expanduser("~/.bashrc")], shell=True, executable="/bin/bash")
-
 # Update package lists and install required packages
 subprocess.run(["sudo", "apt", "update"])
 subprocess.run(["sudo", "apt", "install", "-y", "make", "build-essential", "libssl-dev", "zlib1g-dev",
@@ -39,7 +28,6 @@ subprocess.run(["sudo", "apt-get", "-y", "install", "pciutils"])
 # Install Ollama
 subprocess.run(["curl", "-fsSL", "https://ollama.com/install.sh", "-o", "ollama-installer.sh"])
 subprocess.run(["sh", "ollama-installer.sh"])
-os.environ['OLLAMA_DEBUG'] = '1'
 subprocess.run(["sudo", "systemctl", "enable", "ollama"])
 
 # Start Ollama service using Popen in a subshell
@@ -53,7 +41,6 @@ subprocess.run(["ollama", "pull", "nomic-embed-text"])
 # Set up environment
 subprocess.run(["pyenv", "local", "3.11.9"])
 subprocess.run(["poetry", "install", "--extras", "ui llms-ollama embeddings-ollama vector-stores-qdrant"])
-os.environ['PGPT_PROFILES'] = 'ollama'
 
 # Run make command to start
 subprocess.run(["make", "run"])
