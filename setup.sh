@@ -5,6 +5,7 @@ sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev librea
 curl https://pyenv.run | bash
 pyenv install 3.11.9
 pyenv global 3.11.9
+sudo apt-get install -y python3-distutils
 curl -sSL https://install.python-poetry.org | python3 -
 poetry config virtualenvs.in-project true
 sudo apt-get -y install pciutils
