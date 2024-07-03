@@ -53,6 +53,8 @@ ollama pull nomic-embed-text
 # git clone https://github.com/zylon-ai/private-gpt
 pyenv local 3.11.9
 poetry install --extras "ui llms-ollama embeddings-ollama vector-stores-qdrant"
+pip install requests
+sudo apt-get nano
 
 # Set up PrivateGPT environment variables
 echo 'export PGPT_PROFILES=ollama' >> ~/.bashrc
