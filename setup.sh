@@ -11,9 +11,9 @@ sudo apt-get -y install pciutils
 curl -fsSL https://ollama.com/install.sh | sh
 systemctl enable ollama
 tmux new-session -d -s ollama_session 'ollama serve > ollama.log 2>&1';
+cd private-gpt
 ollama pull mistral
 ollama pull nomic-embed-text
-cd private-gpt
 pyenv local 3.11.9
 poetry install --extras "ui llms-ollama embeddings-ollama vector-stores-qdrant"
 make run
