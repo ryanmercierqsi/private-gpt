@@ -50,8 +50,7 @@ ollama pull mistral
 ollama pull nomic-embed-text
 
 # Install PrivateGPT
-git clone https://github.com/zylon-ai/private-gpt
-cd private-gpt
+# git clone https://github.com/zylon-ai/private-gpt
 pyenv local 3.11.9
 poetry install --extras "ui llms-ollama embeddings-ollama vector-stores-qdrant"
 
