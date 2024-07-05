@@ -23,7 +23,7 @@ def main(api_ip):
     start_time = time.time()
 
     # Prepare files dictionary for multipart/form-data
-    for file_path in tqdm(enumerate(file_paths), total=len(file_paths), desc="Ingesting files"):
+    for file_path in tqdm(file_paths, total=len(file_paths), desc="Ingesting files"):
         files = {}
         files['file'] = open(file_path, 'rb')
 
