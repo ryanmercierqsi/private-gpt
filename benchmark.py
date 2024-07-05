@@ -16,19 +16,14 @@ def main(api_ip):
     api_endpoint = "/v1/ingest/file"
     api_url = f"http://{api_ip}{api_endpoint}"
 
-    headers = {
-        'Content-Type': 'multipart/form-data'
-    }
-
     log_file = 'benchmark.log'
 
-    with open(log_file, 'a') as log:
-        log.write("Ingesting files\n")
+    print("Ingesting Files ...")
 
     start_time = time.time()
 
     # Prepare files dictionary for multipart/form-data
-    for idx, file_path in tqdm(enumerate(file_paths), total=len(file_paths), desc="Ingesting files"):
+    for file_path in tqdm(enumerate(file_paths), total=len(file_paths), desc="Ingesting files"):
         files = {}
         files['file'] = open(file_path, 'rb')
 
@@ -46,8 +41,8 @@ def main(api_ip):
         files['file'].close()
 
     ingestion_time = time.time() - start_time
-    print(f"Ingestion time: {ingestion_time} seconds\n")
 
+    print(f"Ingestion time: {ingestion_time} seconds\n")
     with open(log_file, 'a') as log:
         log.write(f"Ingestion time: {ingestion_time} seconds\n")
 
