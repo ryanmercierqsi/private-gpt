@@ -28,7 +28,7 @@ def main(api_ip):
         files['file'] = open(file_path, 'rb')
 
         # Send POST request with files as multipart/form-data
-        response = requests.post(api_url, headers=headers, files=files)
+        response = requests.post(api_url, files=files)
 
         # Check if request was successful
         with open(log_file, 'a') as log:
