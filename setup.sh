@@ -54,6 +54,7 @@ ollama pull nomic-embed-text
 pyenv local 3.11.9
 poetry install --extras "ui llms-ollama embeddings-ollama vector-stores-qdrant"
 pip install requests
+pip install tqdm
 sudo apt-get nano
 
 # Set up PrivateGPT environment variables

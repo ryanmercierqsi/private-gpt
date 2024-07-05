@@ -2,6 +2,7 @@ import requests
 import os
 import time
 import argparse
+from tqdm import tqdm
 
 def main(api_ip):
     # Directory containing the PDF files
@@ -19,32 +20,36 @@ def main(api_ip):
         'Content-Type': 'multipart/form-data'
     }
 
-    print("ingesting files")
+    log_file = 'benchmark.log'
+
+    with open(log_file, 'a') as log:
+        log.write("Ingesting files\n")
 
     start_time = time.time()
 
     # Prepare files dictionary for multipart/form-data
-    for idx, file_path in enumerate(file_paths):
+    for idx, file_path in tqdm(enumerate(file_paths), total=len(file_paths), desc="Ingesting files"):
         files = {}
         files['file'] = open(file_path, 'rb')
 
         # Send POST request with files as multipart/form-data
-        response = requests.post(api_url, headers, files=files)
+        response = requests.post(api_url, headers=headers, files=files)
 
         # Check if request was successful
-        if response.status_code == 200:
-            # print(response.json())
-            # print(os.path.basename(file_path) + " successfully ingested")
-            pass
-        else:
-            print(f"Error occurred: {response.status_code} - {response.text} with file: {os.path.basename(file_path)}")
+        with open(log_file, 'a') as log:
+            if response.status_code == 200:
+                log.write(f"{os.path.basename(file_path)} successfully ingested\n")
+            else:
+                log.write(f"Error occurred: {response.status_code} - {response.text} with file: {os.path.basename(file_path)}\n")
+
+        # Close file handles
+        files['file'].close()
 
     ingestion_time = time.time() - start_time
-    print("Ingestion time: " + ingestion_time)
+    print(f"Ingestion time: {ingestion_time} seconds\n")
 
-    # Close file handles
-    for file_handle in files.values():
-        file_handle.close()
+    with open(log_file, 'a') as log:
+        log.write(f"Ingestion time: {ingestion_time} seconds\n")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Ingest PDF files to the specified API.')
