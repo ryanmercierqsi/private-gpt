@@ -1,41 +1,52 @@
 #!/bin/bash
 
+# Setup homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo -e 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zshrc
+echo -e 'export PATH="/opt/homebrew/bin:$PATH"' >> ~/.zprofile
+
 # Update and install dependencies
 brew update
 brew install openssl readline sqlite3 xz zlib
-brew install lzma
+brew install tmux
 
 # Install pyenv
-curl https://pyenv.run | bash
+brew install pyenv
 
 # Set up pyenv environment variables
-echo -e 'export PYENV_ROOT="$HOME/.pyenv"\nexport PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
-echo -e 'eval "$(pyenv init --path)"\neval "$(pyenv init -)"' >> ~/.bash_profile
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zprofile
+echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/. zprofile
+echo 'eval "$(pyenv init -)"' >> ~/.zprofile
 
 # Source the profile to set environment variables in the current shell session
-source ~/.bash_profile
+exec "$SHELL"
 
 # Install Python 3.11.9 and set as global version
 pyenv install 3.11.9
 pyenv global 3.11.9
 
 # Install Poetry
-curl -sSL https://install.python-poetry.org | python3 -
+brew install poetry
 
 # Set up Poetry environment variables
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bash_profile
-source ~/.bash_profile
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zprofile
+exec "$SHELL"
 
 # Configure Poetry
 poetry config virtualenvs.in-project true
 
 # Install Ollama
-brew install pciutils
-curl -fsSL https://ollama.com/install.sh | sh
+brew install ollama
 
 # Set up Ollama environment variables
-echo 'export OLLAMA_DEBUG=1' >> ~/.bash_profile
-source ~/.bash_profile
+echo 'export OLLAMA_DEBUG=1' >> ~/.zshrc
+echo 'export OLLAMA_DEBUG=1' >> ~/.zprofile
+exec "$SHELL"
 
 # Enable and start Ollama service
 # macOS doesn't use systemctl, using launchctl for example or simply run as a background process
@@ -57,8 +68,9 @@ pip install requests
 pip install tqdm
 
 # Set up PrivateGPT environment variables
-echo 'export PGPT_PROFILES=ollama' >> ~/.bash_profile
-source ~/.bash_profile
+echo 'export PGPT_PROFILES=ollama' >> ~/.zshrc
+echo 'export PGPT_PROFILES=ollama' >> ~/.zprofile
+exec "$SHELL"
 
 # Run PrivateGPT
 make run
