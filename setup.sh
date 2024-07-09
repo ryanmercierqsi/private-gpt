@@ -55,6 +55,7 @@ pyenv local 3.11.9
 poetry install --extras "ui llms-ollama embeddings-ollama vector-stores-qdrant"
 pip install requests
 pip install tqdm
+pip install yaml
 sudo apt-get install nano
 
 # Set up PrivateGPT environment variables
