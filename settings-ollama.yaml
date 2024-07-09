@@ -27,4 +27,7 @@ vectorstore:
   database: qdrant
 
 qdrant:
-  path: local_data/private_gpt/qdrant
+  # path: local_data/private_gpt/qdrant
+  url: 192.168.0.80
+  port: 6333
+  grpc_port: 6334
